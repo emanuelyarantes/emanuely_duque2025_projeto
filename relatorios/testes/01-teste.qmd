@@ -1,0 +1,86 @@
+---
+title: "Untitled"
+format: 
+  html: 
+    toc: true
+    number-sections: true
+editor: source
+---
+
+# Título Principal (H1)
+
+## Subtítulo (H2)
+
+texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto
+
+texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto.
+
+texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto
+
+texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto .
+
+*Este texto será em itálico* e *este também*
+
+**Este texto será em negrito** e **este também**
+
+***Este texto será em negrito e itálico***
+
+~~Este texto aparecerá riscado~~
+
+`código inline` (útil para comandos, variáveis ou termos técnicos)
+
+-   Primeiro item
+-   Segundo item
+    -   Subitem 2.1
+    -   Subitem 2.2
+-   Terceiro item
+
+## inserindo links em paginas da web
+
+[IFMG-Campus Formiga](https://www.formiga.ifmg.edu.br/){target="blank"}
+
+## Escrevendo Matematica
+
+Integral: \$\$ \int\_{a}\^
+
+## celulas de codigo
+
+Para inserir uma celula de codigo R em um arquivo quarto, podemos usar o atalho 'CTRL+ALT+I':
+
+\`\`\`{r} #simulando uma VA com distribuição normal padrão x \<- rnorm(1000)
+
+# grafico de linha variavel simulada
+
+plot (x, type = "l")
+```
+
+Frações: 
+
+$$
+\frac{numerador}{denominador}$
+$$
+
+Somatório: 
+
+$$
+\sum_{i=1}^{n} x_i
+$$
+
+Produtório: 
+
+$$
+\prod_{i=1}^{n} x_i
+$$
+
+Integral: 
+
+$$
+\int_{a}^{b} f(x) dx
+$$
+
+Limite: 
+
+$$
+\lim_{x \to \infty} f(x)
+$$
+
