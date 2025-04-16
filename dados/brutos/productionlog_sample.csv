@@ -1,0 +1,5 @@
+data,PRODUCT,quantidade,SHIFT,MONTH,DAY,MANUFACTURER,COLOR,MALTING,TASTING
+2025-04-01,Produto A,100,Manhã,4,1,Empresa X,Vermelho,Tradicional,Suave
+2025-04-01,Produto B,150,Tarde,4,1,Empresa Y,Azul,Intensivo,Amargo
+2025-04-02,Produto A,120,Noite,4,2,Empresa X,Verde,Natural,Doce
+2025-04-02,Produto C,90,Manhã,4,2,Empresa Z,Amarelo,Enzimático,Equilibrado
