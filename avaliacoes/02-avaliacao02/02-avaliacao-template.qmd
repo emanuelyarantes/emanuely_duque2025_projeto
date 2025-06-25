@@ -1,0 +1,420 @@
+---
+title: "Avaliação 2 - Valor: 33 pontos"
+subtitle: "Introdução à Ciência de Dados - 2025 <br> Bacharelado em Administração"
+author:   
+  - Emanuely Arantes 
+  - João Pedro Oliveira
+  - Mateus Bispo
+title-block-banner: "#27445C"
+format:
+  html:
+    embed-resources: true
+    page-layout: article
+    toc: true
+    toc-location: left
+lang: "pt"
+date: 2025-06-18
+date-format: long
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+
+```{r}
+#| label: setup
+#| echo: false
+
+# pacotes utilizados
+library(here)
+library(tidyverse)
+library(tidyquant)
+library(effectsize)
+```
+
+
+
+## Questão 1
+
+**a)**
+
+```{r}
+prob_sinistro <- 0.01
+indenizacao_media <- 150000
+premio_puro <- prob_sinistro * indenizacao_media
+premio_puro
+```
+
+
+**b)**
+
+```{r}
+# margem <- 0.25
+margem <- 0.25                  # Margem de 25%
+premio_comercial <- premio_puro * (1 + margem)
+premio_comercial  
+```
+
+
+**c)** 
+
+## fixa a semente para reprodutibilidade
+set.seed(2025)
+
+## simula o custo para 10 residências seguradas
+custos_10 <- sample(
+  c(0, 150000),        # sem sinistro (0) ou com sinistro (150000)
+  size = 10,           # 10 residências
+  replace = TRUE,      # com reposição
+  prob = c(0.99, 0.01) # 99% chance de não ter sinistro
+)
+
+## imprime o vetor simulado
+print(custos_10)
+
+## estimativa do custo médio por apólice
+mean(custos_10)
+
+```{r}
+# fixa a semente para reprodutibilidade
+set.seed(2025)
+
+# simula o custo para 10 residências seguradas
+custos_10 <- sample(
+  c(0, 150000),        # sem sinistro ou com sinistro
+  size = 10,           # número de residências
+  replace = TRUE,      # com reposição
+  prob = c(0.99, 0.01) # 99% chance de não sinistro
+)
+
+# imprime o vetor de custos simulados
+print(custos_10)
+
+# calcula o custo médio por apólice
+mean(custos_10)
+
+```
+
+
+Simulação dos custos médios com 100 residências seguradas:
+
+```{r}
+# ## Simulação com 100 residências
+set.seed(2025)
+custos_100 <- sample(
+  c(0, 150000),
+  size = 100,
+  replace = TRUE,
+  prob = c(0.99, 0.01)
+)
+mean(custos_100)
+
+```
+
+
+Simulação dos custos médios com 1000 residências seguradas:
+
+```{r}
+# ## Simulação com 1000 residências
+set.seed(2025)
+custos_1000 <- sample(
+  c(0, 150000),
+  size = 1000,
+  replace = TRUE,
+  prob = c(0.99, 0.01)
+)
+mean(custos_1000)
+
+```
+
+
+**d)**A Lei dos Grandes Números justifica por que, nas simulações, os resultados se aproximam da média esperada quando o número de residências seguradas aumenta.
+
+Na prática, isso significa que, ao simular sinistros para muitas casas, a média dos custos tende a ficar próxima do valor teórico de R$ 1.500 por apólice (calculado como 1% de R$ 150.000). Isso garante maior previsibilidade para a seguradora, que pode planejar melhor os prêmios e reduzir o risco de perdas inesperadas.
+
+
+
+
+**e)**Ao incluir uma franquia de R$ 50.000, a seguradora passa a pagar apenas a parte do sinistro que excede esse valor. Assim, se o sinistro for de R$ 150.000, o pagamento da seguradora será de R$ 100.000.
+
+Com esse novo valor, o custo médio esperado por apólice diminui, permitindo:
+
+(a) Reduzir o valor do prêmio cobrado ao cliente; ou
+
+(b) Manter o mesmo prêmio e obter uma margem de lucro maior.
+
+Essa estratégia também ajuda a desestimular pedidos de sinistros de menor valor, pois o segurado participa do prejuízo, o que, em contrapartida, pode ser ruim para o segurado.
+
+
+## Questão 2
+
+**a)** 
+
+```{r}
+## Parâmetros
+media <- 5.9
+desvio <- 1.1
+
+# Probabilidade de ser maior que 8 dias
+1 - pnorm(8, mean = media, sd = desvio)
+
+```
+
+
+**b)** 
+
+```{r}
+# # Percentil de 90%
+qnorm(0.90, mean = media, sd = desvio)
+
+```
+
+
+**c)** 
+
+```{r}
+# # Probabilidade de ser entregue em até 7 dias
+pnorm(7, mean = media, sd = desvio)
+```
+
+
+
+
+
+## Questão 3
+
+
+**a)** 
+
+```{r}
+# # Valores conhecidos
+media <- 18500
+desvio <- 2300
+valor <- 21800
+
+# Cálculo do Z
+z <- (valor - media) / desvio
+z
+
+```
+
+Resposta:O score Z de aproximadamente 1,43 indica que a loja vendeu 1,43 desvios-padrão acima da média naquele dia. Isso significa que o desempenho foi bem superior ao comum dentro da rede.
+
+
+
+
+**b)** 
+
+```{r}
+# # Probabilidade acumulada até esse Z
+pnorm(z)
+
+```
+
+
+Reposta:A probabilidade acumulada (ou percentil) de 0,9236 indica que essa loja vendeu mais do que aproximadamente 92,36% das outras lojas naquele dia. Em outras palavras, ela ficou no percentil 92, ou seja, entre as melhores.
+
+
+**c)**Com base na probabilidade acumulada de 0,9247 para o valor de R$ 21.800,00 em vendas, essa loja teve resultado superior ao de 92,47% das demais.
+
+Como a empresa considera como "excepcional" o desempenho entre os 10% melhores (acima do percentil 90), esse caso atende ao critério. Portanto, sim, foi um dia excepcional.
+
+Podemos usar percentil e probabilidade acumulada como sinônimos neste caso?
+Pergunta extra:Sim, neste contexto, probabilidade acumulada e percentil podem ser usados como sinônimos, pois ambos indicam a posição relativa da loja dentro da distribuição dos resultados.
+
+
+
+## Questão 4
+
+**a)**
+
+```{r}
+z <- qnorm(0.01)
+desvio <- 0.045
+var_percentual <- abs(z * desvio)
+var_percentual
+
+
+```
+
+Cálculo do VaR 99% percentual:
+
+```{r}
+# # Parâmetros
+desvio <- 0.045  # Desvio-padrão dos retornos mensais
+z <- qnorm(0.01) # Quantil da normal para 1% (VaR 99%)
+
+# Cálculo do VaR percentual
+var_percentual <- abs(z * desvio)
+var_percentual
+
+```
+
+Cálculo do VaR 99% monetário (valor absoluto da perda):
+
+```{r}
+# # Investimento atual
+investimento <- 400000
+
+# Cálculo do VaR monetário
+var_monetario <- var_percentual * investimento
+var_monetario
+
+```
+
+
+
+**b)**Um VaR 99% de R$ 41.874,26 significa que, com base na distribuição normal dos retornos, a empresa tem 99% de confiança de que as perdas mensais não ultrapassarão esse valor. Apenas em 1% dos casos a perda pode ser maior.
+
+
+
+**c)**Limitações da Normalidade
+
+Caudas pesadas: Retornos financeiros muitas vezes têm perdas e ganhos extremos que a distribuição normal não prevê adequadamente.
+
+Assimetria: Os retornos reais podem ter mais eventos negativos, o que a distribuição normal (simétrica) não representa bem
+
+
+
+
+
+## Questão 5
+
+- [ ] A 
+
+- [ ] B 
+
+- [ ] C 
+
+- [X] D 
+
+- [ ] E 
+
+A opção D está correta.
+Pois o gráfico apresenta e mostra as taxas de feminicídio para cada 100 mil
+mulheres, e portanto, os países com taxas mais baixas de feminicídio terão uma
+posição mais baixa nesse ranking.
+As outras alternativas estão erradas, pois não encontramos a informação
+certa disponível nos gráficos e no texto. Santa Lúcia não é citada
+no texto e não é possível afirmar que ela apresenta uma das taxas mais baixas
+de feminicídio na região sem dados concretos. Além disso, o gráfico não
+apresenta um ranking, e sim uma lista de países com suas respectivas taxas de
+feminicídio.
+Por que as demais estão erradas?
+
+- **Letra A ** - O gráfico não foi feito somente para os cálculos de proporção. Na verdade, ele apresenta também dados absolutos e relativos para mostrar uma análise mias completa. A alternativa não vê isso.
+  
+- **Letra B** - Nos países como o Brasil, México e Argentina possuem os maiores números absolutos, mas as taxas por 100 mil mulheres não estão como as maiores. Os países com as maiores taxas são Honduras, EL Salvador e a República Dominicana. Então há uma confusão entre número absoluto e taxa proporcional, um erro nessa interpretação dos dados.
+  
+- **Letra C** - A alternativa B tem pouco fundamento, por falar de políticas públicas com base na análise de risco, mas ela não leva em conta a complexidade dos determinantes do feminicídio. Ela resume o problema ao focar só na autodefesa e nos comportamentos de riscos, ignorando que as mulheres nem sempre têm escolha dos seus contextos sociais, econômicos e culturais, que são os fatores e justamente as fontes que as colocam na situação de vulnerabilidade.
+  
+- **Letra E** - Ela está incorreta e contraditória. Essa alternativa mostra uma compreensão ruim e fraca da relação entre número o absoluto e taxa proporcional. O Brasil aparece com um alto número absoluto, mas não com uma das maiores taxas. Honduras, ao contrário do Brasil, tem uma taxa bem maior, o que indica mais risco, apesar do seu número absoluto ser menor. Isso acaba com a ideia de que o número relativo "vítima mais" no Brasil
+
+
+
+
+
+## Questão 6
+
+
+**a)** 
+
+
+```{r}
+# library(tidyquant)
+library(dplyr)
+library(tidyr)
+
+dados_precos <- c("PETR4.SA", "WEGE3.SA") %>%
+  tq_get(from = "2024-01-01") %>%
+  select(symbol, date, close) %>%
+  pivot_wider(names_from = symbol, values_from = close) %>%
+  rename(petrobras = `PETR4.SA`, weg = `WEGE3.SA`)
+
+head(dados_precos)
+
+```
+
+
+**b.1)** 
+   
+```{r}
+dados_ret <- dados_precos %>%
+  mutate(ret_petrobras = log(petrobras / lag(petrobras)),
+         ret_weg       = log(weg       / lag(weg))) %>%
+  drop_na()
+
+head(dados_ret)
+
+```
+
+Por que usamos retorno?
+Usamos retornos para medir a variação relativa dos preços, o que permite comparar diferentes ativos.
+Além disso, os retornos têm escala padronizada e revelam a correlação entre os movimentos dos ativos — o que os preços brutos não conseguem mostrar.
+
+**b.2)** 
+
+```{r}
+correlacao <- cor(dados_ret$ret_petrobras, dados_ret$ret_weg)
+print(correlacao)
+```
+
+
+**b.3)** 
+
+```{r}
+# # Instala o pacote effectsize, se ainda não estiver instalado
+install.packages("effectsize")
+
+# Carrega o pacote
+library(effectsize)
+
+# Calcula a correlação entre os retornos
+correlacao <- cor(dados_ret$ret_petrobras, dados_ret$ret_weg)
+
+# Interpreta a magnitude da correlação com base em Cohen (1988)
+interpretacao <- interpret_r(correlacao)
+
+# Exibe o valor da correlação e sua interpretação
+print(correlacao)
+print(interpretacao)
+
+```
+
+**Interpretação:**O coeficiente de correlação entre os retornos dessas ações foi de aproximadamente 0,137. De acordo com Cohen (1988), isso indica uma correlação fraca e positiva(retorno: small).
+O gráfico mostra uma leve tendência de relação entre os retornos diários, mas com grande dispersão dos pontos, o que confirma a fraca associação linear.
+Em resumo: quando uma ação sobe, a outra pode até subir também, mas essa relação é instável.
+
+
+
+**c)** 
+
+```{r}
+# library(ggplot2)
+
+# Determinar as datas de início e fim automaticamente do dataset
+data_inicio <- min(dados_ret$date)
+data_fim <- max(dados_ret$date)
+
+# Criar gráfico
+ggplot(dados_ret, aes(x = ret_petrobras, y = ret_weg)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  labs(
+    title = "Relação entre os Retornos Diários de PETR4 e WEGE3",
+    subtitle = paste("Período:", data_inicio, "a", data_fim),
+    x = "Retorno Diário de PETR4 (log)",
+    y = "Retorno Diário de WEGE3 (log)",
+    caption = "Fonte: Yahoo Finance via tidyquant"
+  ) +
+  theme_minimal()
+
+```
+
+
+**Interpretação:**
+
+
+**d)** Mesmo com correlação fraca, a combinação de PETR4 e WEGE3 ajuda na diversificação da carteira. Isso porque os dois ativos não se movimentam sempre na mesma direção.
+Assim, as variações de um ativo podem ser compensadas pelo outro, reduzindo o risco total da carteira. Mesmo sem correlação negativa, uma fraca correlação já traz benefícios.

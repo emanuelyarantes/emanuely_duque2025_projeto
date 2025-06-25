@@ -1,0 +1,301 @@
+---
+title: "Resolucão da Avaliação 1"
+subtitle: "Introdução à Ciência de Dados - 2025 <br> Bacharelado em Administração"
+author: "Emanuely Arantes"
+title-block-banner: "#27445C"
+format:
+  html:
+    embed-resources: true
+    page-layout: article
+    toc: true
+    toc-location: left
+lang: "pt"
+date: 2025-05-14
+date-format: long
+execute: 
+  eval: false
+  echo: true
+  warning: false
+  message: false
+crossref:
+  fig-prefix: 'Fig.'
+  tbl-prefix: 'Tab.'
+---
+
+
+```{r}
+#| label: setup
+#| echo: false
+
+# configura a exibição de números
+options(digits = 3, scipen = 99)
+
+# pacotes utilizados
+library(here)
+library(tidyverse)
+library(kableExtra)
+```
+
+
+
+## Questão 1 
+
+
+**a)** Entender se clientes que veem anúncios em vídeo têm uma taxa de conversão maior que os que recebem conteúdo em texto, analisando a variável CONVERTED em relação à VIDEO_AD.
+
+
+
+**b)** A análise mais adequada para esse caso é a análise diagnóstica, porque o que queremos descobrir é por que há diferença na taxa de conversão entre clientes que veem anúncios em vídeo e os que recebem conteúdo em texto.
+
+A hipótese inicial é que o formato em vídeo possui maior impacto na tomada de decisão, por ser mais dinâmico, visual e envolvente, facilitando a compreensão do produto e acelerando a jornada do cliente no funil de vendas — principalmente nas etapas de interesse e decisão. Se essa hipótese se confirmar, a empresa poderá investir em campanhas mais eficazes e direcionadas.
+
+Segundo o Guia do IBM SPSS Modeler CRISP-DM (IBM CORPORATION, 2023), a análise diagnóstica é indicada quando buscamos compreender relações entre variáveis e padrões comportamentais que explicam o que foi observado nos dados. Nos próprios slides da disciplina, é mostrado que esse tipo de análise trabalha com segmentações, correlações e detalhamentos (drill-down), como vamos fazer ao comparar a conversão entre grupos expostos ou não aos vídeos.
+
+Essa etapa se encaixa diretamente nas Fases 1 e 2 do modelo CRISP-DM — ou seja, no entendimento do negócio e dos dados, que são essenciais antes de qualquer modelagem ou ação prática.
+
+Além disso, essa análise tem um grande valor para a área de marketing. Se conseguirmos entender quais tipos de mídia funcionam melhor, é possível ajustar toda a estratégia de conteúdo, segmentação de campanhas, escolha de canais (como Instagram, e-mail marketing, site), e até melhorar a experiência do usuário (UX) na loja online. Isso ajuda a alcançar um público mais amplo e mais qualificado, otimizando investimento e comunicação com mais eficiência.
+
+Ou seja, a análise diagnóstica aqui não é só técnica, mas também estratégica, e pode trazer insights valiosos para que a destilaria tome decisões baseadas em dados reais — algo essencial em um cenário digital cada vez mais competitivo.
+
+
+
+
+## Questão 2 
+
+
+**a)** 
+
+```{r}
+
+# Carrega os pacotes
+library(here)
+library(readr)
+
+# 1.1 Define o caminho relativo do arquivo dentro do projeto RStudio
+caminho <- here("dados", "brutos", "onlineshop.csv")
+
+# 1.2 Importa o arquivo CSV com a função read_csv do pacote readr
+dados_lojaonline <- read_csv(caminho)
+library(ggplot2)
+
+ggplot(dados_lojaonline_limpos, aes(x = metodo_pagamento)) +
+  geom_bar() +
+  labs(
+    title = "Distribuição dos Métodos de Pagamento",
+    x = "Método de Pagamento",
+    y = "Número de Clientes"
+  ) +
+  theme_minimal()
+
+```
+
+
+**b)** 
+
+```{r}
+
+# Visualiza a estrutura e os tipos de dados
+dplyr::glimpse(dados_lojaonline)
+
+
+```
+```{r}
+
+# tabela dos dados acima arrumados
+dados_lojaonline_limpos %>%
+  group_by(metodo_pagamento) %>%
+  summarize(
+    clientes = n(),
+    faturamento_medio = mean(faturamento, na.rm = TRUE)
+  ) %>%
+  arrange(desc(faturamento_medio)) %>%
+  kable(
+    format = "html",
+    caption = "Faturamento Médio por Método de Pagamento",
+    digits = 2,
+    col.names = c("Método de Pagamento", "Nº de Clientes", "Faturamento Médio (€)")
+  ) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = FALSE)
+
+```
+
+**c.1)** O objeto dados_lojaonline contém 463 observações que correspondem ao número total de registros (linhas) no conjunto de dados importado. Ela conta também com 12 colunas.
+
+
+
+**c.2)** Cada observação representa uma sessão registrada de um cliente na loja online da destilaria, contendo variáveis demográficas, dados de comportamento de compra, exposição à publicidade e resposta à campanha. Isso inclui informações como sexo, idade, tipo de cliente, pontuação de crédito, valor da compra, método de pagamento e se o cliente viu anúncio em vídeo e converteu.
+
+
+
+
+## Questão 3 (8 pontos)
+
+### Tópico: Limpeza e Preparação dos Dados 
+
+**a)** 
+
+```{r}
+
+dados_lojaonline_limpos <- dados_lojaonline %>%
+  rename(
+    data = DATE,
+    id_cliente = USER_ID,
+    idade = AGE,
+    sexo = GENDER,
+    tipo = TYPE,
+    score_de_credito = CREDIT_SCORE,
+    tempo_da_conta = LIFETIME,
+    metodo_pagamento = PAYMENT_METHOD,
+    faturamento = TURNOVER,
+    devolucao = SENDBACK,
+    tipo_de_anuncio = VIDEO_AD,
+    convertido = CONVERTED
+  ) %>%
+  mutate(
+    data = as.Date(data),
+    id_cliente = as.factor(id_cliente),
+    idade = as.integer(idade),
+    sexo = as.factor(sexo),
+    tipo = as.factor(tipo),
+    score_de_credito = factor(score_de_credito, ordered = TRUE),
+    tempo_da_conta = as.integer(tempo_da_conta),
+    metodo_pagamento = as.factor(metodo_pagamento),
+    faturamento = as.numeric(faturamento),
+    devolucao = as.logical(devolucao),
+    tipo_de_anuncio = as.logical(tipo_de_anuncio),
+    convertido = as.logical(convertido)
+  )
+
+dplyr::glimpse(dados_lojaonline_limpos)
+
+
+```
+
+**b)** 
+
+```{r}
+
+summary(dados_lojaonline_limpos)
+
+```
+
+
+**b.1)**Cliente com mais transações: ron_swanson76 com 15 transações.
+
+
+**b.2)**Não classificados por tipo:  116 clientes não foram classificados, já não foram entrevistados.
+
+
+**b.3)** 
+
+- Faturamento médio = 182 euros
+
+- Faturamento máximo = 718 euros
+
+- Faturamento mínimo = 31 euros
+
+
+
+
+## Questão 4 (10 pontos)
+
+ 
+**a)** 
+
+
+```{r}
+faturamento_medio_pagamento <- dados_lojaonline_limpos %>% 
+  group_by(metodo_pagamento) %>% 
+  summarize(faturamento_medio = mean(faturamento, na.rm = TRUE)) %>% 
+  arrange(desc(faturamento_medio))
+
+# exibe o resultado
+faturamento_medio_pagamento
+
+
+```
+
+**b)** 
+
+```{r}
+
+library(dplyr)
+library(knitr)
+library(kableExtra)
+
+clientes_especificos <- dados_lojaonline_limpos %>% 
+  filter(id_cliente %in% c("ron_swanson76", "horst_lüning", "dorothy_parker")) %>% 
+  group_by(id_cliente) %>% 
+  summarize(faturamento_medio = mean(faturamento, na.rm = TRUE)) %>% 
+  arrange(desc(faturamento_medio))
+
+# Tabela formatada
+clientes_especificos %>%
+  kable(digits = 2, caption = "Faturamento Médio dos Clientes Específicos") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = FALSE)
+
+
+```
+```{r}
+
+#para exemplificação, foi feito um gráfico
+library(ggplot2)
+
+ggplot(clientes_especificos, aes(x = reorder(id_cliente, -faturamento_medio), y = faturamento_medio)) +
+  geom_col(fill = "steelblue") +
+  labs(
+    title = "Faturamento Médio por Cliente",
+    x = "Cliente",
+    y = "Faturamento Médio (€)"
+  ) +
+  theme_minimal()
+
+
+
+
+```
+
+
+**c)** 
+
+
+```{r}
+
+dados_conversao <- dados_lojaonline_limpos %>% 
+  group_by(tipo_de_anuncio) %>% 
+  summarize(
+    total_de_clientes = dplyr::n(),
+    porcentagem_de_conversao = mean(convertido, na.rm = TRUE) * 100,
+    faturamento_medio_por_anuncio = mean(faturamento, na.rm = TRUE)
+  )
+
+# Exibe o resultado
+dados_conversao
+
+
+```
+
+
+
+**d)** 
+
+
+```{r}
+analise_tipo_cliente <- dados_lojaonline_limpos %>%
+  group_by(tipo) %>%
+  summarize(
+    total_transacoes = n(),
+    porcentagem_devolucao = mean(devolucao, na.rm = TRUE) * 100,
+    faturamento_medio = mean(faturamento, na.rm = TRUE),
+    faturamento_sem_devolucao = mean(faturamento[devolucao == FALSE], na.rm = TRUE)
+  )
+
+# Exibe o resultado 
+analise_tipo_cliente
+
+```
+
+
+
+
+
