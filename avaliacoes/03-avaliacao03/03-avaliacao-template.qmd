@@ -1,0 +1,338 @@
+---
+title: "Avaliação 3 - Valor: 34 pontos"
+subtitle: "Introdução à Ciência de Dados - 2025 <br> Bacharelado em Administração"
+author:   
+  -Emanuely Arantes
+  -João Pedro Rezende
+  -Mateus Bispo
+title-block-banner: "#27445C"
+format:
+  html:
+    embed-resources: true
+    page-layout: article
+    toc: true
+    toc-location: left
+lang: "pt"
+date: 2025-07-09
+date-format: long
+execute:
+  eval: true
+  echo: true
+  warning: false
+  message: false
+---
+
+
+
+```{r}
+#| label: setup
+#| echo: false
+
+# configura a exbição de números decimais
+options(digits = 3, scipen = 999)
+
+# pacotes utilizados
+library(tidyverse)
+library(ggpubr)
+```
+
+
+
+
+## Questão 1
+
+### Inferência sobre Proporções Populacionais
+
+**a)** 
+
+```
+
+
+```{r}
+# Estimativa pontual da proporção de clientes satisfeitos do grupo A
+
+```{r} 
+# Dados da pesquisa
+# dados da pesquisa marketing clientes satisfeitos
+n_clientes <- 350
+clientes_satisfeitos <- 273
+
+# estimativa pontual da proporção populacional
+# ou simplemente proporção amostral
+prop_amostral <- clientes_satisfeitos/ n_clientes
+prop_amostral
+```
+
+
+```{r}
+# Estimativa pontual da proporção de clientes satisfeitos do grupo B
+
+# # Dados da pesquisa
+# dados da pesquisa marketing clientes satisfeitos
+n_clientes <- 290
+clientes_satisfeitos <- 198
+
+# estimativa pontual da proporção populacional
+# ou simplemente proporção amostral
+prop_amostral <- clientes_satisfeitos/ n_clientes
+prop_amostral
+```
+
+
+```{r}
+# Estimativa pontual da diferença entre as proporções
+
+# # Categoria A: Eletrônicos
+x_A <- 273
+n_A <- 350
+
+# Categoria B: Moda
+x_B <- 198
+n_B <- 290
+
+# Proporções
+prop_A <- x_A / n_A  # ≈ 0.78
+prop_B <- x_B / n_B  # ≈ 0.6828
+
+# Diferença (A - B)
+dif_observada <- prop_A - prop_B
+dif_observada  # ≈ 0.0972
+
+
+```
+
+
+
+
+**b)** Apresentar apenas uma estimativa pontual (ou seja, um único número como resultado de uma análise estatística ) não é suficiente para uma interpretação completa e confiável. Isso porque essa estimativa representa apenas um retrato da realidade baseado em uma amostra específica, e não leva em conta a variabilidade natural que ocorre entre diferentes amostras.
+
+Como estamos trabalhando com dados amostrais, há sempre um grau de incerteza envolvido. Se fizéssemos a mesma pesquisa com outro grupo de pessoas, poderíamos obter um resultado diferente. Além disso, fatores como erros de medição, respostas imprecisas, alterações no tempo e até falhas no processamento dos dados também podem influenciar os resultados. Esses elementos não são capturados apenas pela estimativa pontual.
+
+Por isso, é fundamental apresentar também intervalos de confiança, pois eles indicam uma faixa de valores plausíveis para o parâmetro da população, levando em consideração essa incerteza. Assim, a análise se torna mais transparente, responsável e útil para a tomada de decisão.
+
+
+
+**c)** 
+
+
+```{r}
+# Dados da pesquisa
+x_A <- 273  # clientes satisfeitos da Categoria A
+n_A <- 350  # total de clientes da Categoria A
+
+x_B <- 198  # clientes satisfeitos da Categoria B
+n_B <- 290  # total de clientes da Categoria B
+
+# Teste de proporções com correção de continuidade (padrão)
+prop.test(c(x_A, x_B), c(n_A, n_B))
+
+```
+
+
+
+**d)** 
+O intervalo de confiança de 95% para a diferença entre as proporções de clientes satisfeitos nas categorias A e B é de aproximadamente [0,0251 ; 0,1693]. Isso quer dizer que, com 95% de confiança, a proporção de clientes satisfeitos com produtos eletrônicos (Categoria A) é entre 2,51% e 16,93% maior do que a proporção de clientes satisfeitos com produtos de moda (Categoria B).
+
+Como o intervalo não inclui o valor zero, isso indica que há uma diferença estatisticamente significativa entre as proporções populacionais. Em outras palavras, é pouco provável que essa diferença tenha surgido apenas por acaso ou devido à variação amostral.
+
+Além disso, como todos os valores do intervalo são positivos, essa diferença favorece claramente a Categoria A, reforçando a conclusão de que os clientes dessa categoria estão mais satisfeitos em comparação à Categoria B.
+
+Portanto, com base nessa análise estatística, é possível afirmar que existe evidência suficiente para concluir que a satisfação dos clientes é maior na Categoria A, o que pode ser um indicativo importante para decisões estratégicas da empresa em relação aos seus produtos.
+
+
+
+
+**e.1)** 
+
+
+
+$$
+\begin{cases} H_0: p = 0{,}70 \quad \text{(a proporção de clientes satisfeitos é 70%)} \\ H_A: p > 0{,}70 \quad \text{(a proporção de clientes satisfeitos é maior que 70%)} \end{cases}
+$$
+
+
+**e.2)** 
+ 
+
+```{r}
+# Teste de hipótese unilateral para proporção da Categoria A
+
+# # Teste de hipótese unilateral para proporção da Categoria A
+
+# Dados da amostra
+n_A <- 350
+x_A <- 273
+
+# Teste unilateral (alternativa: maior que)
+teste_A <- prop.test(x = x_A, n = n_A, p = 0.70, alternative = "greater", conf.level = 0.95)
+
+# Ver o resultado
+teste_A
+
+```
+
+
+
+**e.3)** Ao realizar o teste de hipótese para verificar se a proporção de clientes satisfeitos na Categoria A (produtos eletrônicos) é maior que 70%, foi obtido um valor-p de aproximadamente 0,0204.
+
+Como esse valor é menor que 0,05, rejeitamos a hipótese nula ao nível de significância de 5%. Isso significa que há evidência estatística suficiente para afirmar que a proporção de clientes satisfeitos na Categoria A é significativamente maior que 70%.
+
+Em resumo, com base nos dados coletados e na análise estatística realizada, podemos concluir que os clientes da Categoria A estão, assim, mais satisfeitos do que o limite mínimo proposto, o que reforça a percepção positiva desse segmento de produtos para a empresa.
+
+
+
+
+
+## Questão 2
+
+### Inferência sobre Médias Populacionais
+
+```{r}
+# Cria a data.frame dados_entrega
+dados_entrega <- data.frame(
+  tempo = c(
+    1.9908307, 3.7595980, 3.9207872, 1.9499968, 2.5570788, 2.9083451, 
+    3.8215787, 3.4254931, 4.1066170, 3.7159112, 2.3757705, 4.3799877, 
+    4.0898537, 4.6885358, 1.9032753, 4.9526208, 4.7632426, 3.5487350, 
+    5.2520306, 4.5840950, 2.7728566, 1.6544221, 1.9158527, 3.3874123,
+    3.1677474, 4.2208561, 2.7834305, 2.9044544, 4.5360855, 2.2195599, 
+    2.7240852, 2.6655864, 1.4009759, 3.4665378, 3.3535627, 4.6972176, 
+    1.9733366, 2.5457229, 2.2336230, 2.6573906, 2.6681639, 3.1323411, 
+    2.4254247, 2.7917952, 4.9867621, 2.8329370, 2.8299644, 3.5470596, 
+    1.4070574, 3.1499424, 1.9685541, 2.4178228, 3.4466604, 3.6865291, 
+    3.3801921, 3.5045991, 2.2455080, 4.4135944, 3.2958687, 3.3348655, 
+    0.2198195, 1.6197339, 2.4793752, 3.6855232, 2.6521006, 4.5120387, 
+    4.4196294, 1.1254838, 2.1009464, 1.8516211, 2.5130132, 2.6551619, 
+    0.8074057, 4.2885169, 2.6779839
+  ),
+  parceiro = c(
+    rep("Atual", 35),
+    rep("Novo", 40)
+  )
+)
+```
+
+
+
+**a)** 
+
+
+```{r}
+# Gráfico quantile-quantile para verificar normalidade dos dados
+# Instala o pacote ggpubr, se necessário
+# install.packages("ggpubr")
+
+# Carrega o pacote
+library(ggpubr)
+
+# Cria a data.frame dados_entrega
+dados_entrega <- data.frame(
+  tempo = c(
+    1.9908307, 3.7595980, 3.9207872, 1.9499968, 2.5570788, 2.9083451, 
+    3.8215787, 3.4254931, 4.1066170, 3.7159112, 2.3757705, 4.3799877, 
+    4.0898537, 4.6885358, 1.9032753, 4.9526208, 4.7632426, 3.5487350, 
+    5.2520306, 4.5840950, 2.7728566, 1.6544221, 1.9158527, 3.3874123,
+    3.1677474, 4.2208561, 2.7834305, 2.9044544, 4.5360855, 2.2195599, 
+    2.7240852, 2.6655864, 1.4009759, 3.4665378, 3.3535627, 4.6972176, 
+    1.9733366, 2.5457229, 2.2336230, 2.6573906, 2.6681639, 3.1323411, 
+    2.4254247, 2.7917952, 4.9867621, 2.8329370, 2.8299644, 3.5470596, 
+    1.4070574, 3.1499424, 1.9685541, 2.4178228, 3.4466604, 3.6865291, 
+    3.3801921, 3.5045991, 2.2455080, 4.4135944, 3.2958687, 3.3348655, 
+    0.2198195, 1.6197339, 2.4793752, 3.6855232, 2.6521006, 4.5120387, 
+    4.4196294, 1.1254838, 2.1009464, 1.8516211, 2.5130132, 2.6551619, 
+    0.8074057, 4.2885169, 2.6779839
+  ),
+  parceiro = c(rep("Atual", 35), rep("Novo", 40))
+)
+
+# Gera gráficos QQ para cada parceiro
+ggqqplot(dados_entrega, x = "tempo", facet.by = "parceiro",
+         color = "parceiro", palette = "jco") +
+  labs(title = "Gráfico QQ dos Tempos de Entrega por Parceiro")
+
+
+```
+
+Ao analisar os gráficos quantil-quantil (QQ-plot) das duas amostras, observamos que os pontos seguem aproximadamente uma linha reta, principalmente no centro da distribuição. Embora existam pequenas oscilações nas extremidades, esse comportamento é esperado em dados reais, especialmente quando lidamos com amostras pequenas, que naturalmente apresentam maior variabilidade nas caudas.
+
+Essa disposição indica que os dados não apresentam desvios graves em relação à normalidade, o que sustenta a suposição de que as duas amostras seguem uma distribuição aproximadamente normal. O fato de os pontos se manterem próximos da linha ao longo do gráfico reforça essa conclusão.
+
+Portanto, com base na forma geral dos QQ-plots, é razoável assumir a normalidade dos dados em ambas as amostras, o que justifica o uso do teste t para a comparação entre médias nas etapas seguintes da análise.
+
+
+**b)**
+
+
+```{r}
+# Estimativa por intervalo de confiança para a diferença entre médias 
+
+# # Separando os tempos por parceiro
+tempo_atual <- subset(dados_entrega, parceiro == "Atual")$tempo
+tempo_novo  <- subset(dados_entrega, parceiro == "Novo")$tempo
+
+# Teste t de Welch para diferença de médias (com IC de 95%)
+t.test(tempo_atual, tempo_novo, var.equal = FALSE)
+
+```
+
+
+
+
+**c)** Para estimar os tempos médios de entrega de cada parceiro, utilizamos o código em R para calcular as médias separadamente e, em seguida, a diferença entre elas. O resultado foi o seguinte:
+
+```{r}
+# Calcular as médias dos dois parceiros
+media_atual <- mean(subset(dados_entrega, parceiro == "Atual")$tempo)
+media_novo  <- mean(subset(dados_entrega, parceiro == "Novo")$tempo)
+
+# Calcular a diferença entre as médias
+diferenca_medias <- media_atual - media_novo
+
+# Exibir resultados
+cat("✅ Média do Parceiro Atual:", round(media_atual, 2), "dias\n")
+cat("✅ Média do Parceiro Novo:", round(media_novo, 2), "dias\n")
+cat("📊 Diferença entre médias (Atual - Novo):", round(diferenca_medias, 2), "dias\n")
+
+```
+Esses valores indicam que o Parceiro Atual tem um tempo médio de entrega maior, com uma diferença de aproximadamente 0,48 dias a mais em relação ao Parceiro Novo.
+
+Dessa maneira, com base na estimativa pontual obtida por meio do código, o Parceiro Novo se mostra mais eficiente em termos de tempo médio de entrega, o que pode ser relevante para decisões logísticas da empresa.
+
+
+**d)**Ao aplicar o teste t utilizando o R, obtivemos o intervalo de confiança de 95% para a diferença entre os tempos médios de entrega: aproximadamente -0,0005 a 0,9625 dias.
+
+Como o valor 0 está incluído nesse intervalo, isso significa que não há evidência estatística suficiente para afirmar que existe uma diferença real entre os tempos médios de entrega dos dois parceiros. Em outras palavras, a diferença observada de 0,48 dias pode ter ocorrido por acaso, e não necessariamente representa uma vantagem real de um parceiro sobre o outro.
+
+O próprio código R confirma isso ao verificar que o zero está dentro do intervalo:
+
+```{r}
+# Executar o teste t
+resultado_t <- t.test(
+  subset(dados_entrega, parceiro == "Atual")$tempo,
+  subset(dados_entrega, parceiro == "Novo")$tempo,
+  var.equal = FALSE
+)
+
+# Extrair intervalo de confiança
+ic <- resultado_t$conf.int
+
+# Exibir intervalo
+cat("📈 Intervalo de Confiança (95%):", round(ic[1], 4), "a", round(ic[2], 4), "dias\n")
+
+# Verificar se o zero está dentro do intervalo
+if (ic[1] < 0 && ic[2] > 0) {
+  cat(" O zero está dentro do intervalo. Não há evidência estatisticamente significativa de diferença entre os tempos médios.\n")
+} else {
+  cat("zero está fora do intervalo. Há evidência estatisticamente significativa de diferença entre os tempos médios.\n")
+}
+
+```
+Dessa maneira, o valor-p obtido foi maior que 0,05, o que reforça essa conclusão: a diferença entre os parceiros não é estatisticamente significativa ao nível de 5%.
+
+Em síntese, com base nesta amostra e na análise estatística, não podemos afirmar com segurança que um dos parceiros é mais rápido que o outro em termos de tempo médio de entrega.
+
+
+
+
+
+
